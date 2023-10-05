@@ -1,0 +1,53 @@
+﻿
+<ul class="list-unstyled">
+    @foreach (var product in Products)
+    {
+        <li class="media my-3">    
+            <div class="media-img-wrapper mr-2"> 
+                <a href="#">
+                    <img class="media-img" src="@product.ImageUrl" alt="@product.Title"/>
+                </a>
+            </div>
+            <div class="media-body">
+                <a href="#">
+                    <h4 class="mb-0">@product.Title</h4>
+                </a>
+                <p>@product.Description</p>
+                <h5 class="price">
+                    $@product.Price
+                </h5>
+            </div>
+        </li>
+    }
+</ul>
+
+
+@code {
+    private static List<Product> Products = new()
+    {
+    new Product
+    {
+        Id = 1,
+        Title = "Aspirin",
+        Description = "Pain reliever and fever reducer",
+        ImageUrl = "https://pharmacyapozona.com/wp-content/uploads/2021/03/aspirin-migraine-24.jpg",
+        Price = 9.99m
+    },
+    new Product
+    {
+        Id = 2,
+        Title = "Ibuprofen",
+        Description = "Nonsteroidal anti-inflammatory drug (NSAID)",
+        ImageUrl = "https://m.media-amazon.com/images/I/71byBwaWpuL._AC_UF894,1000_QL80_.jpg",
+        Price = 7.99m
+    },
+    new Product
+    {
+        Id = 3,
+        Title = "Amoxicillin",
+        Description = "Antibiotic used to treat bacterial infections",
+        ImageUrl = "https://www.mintrxpharmacy.com/on/demandware.static/-/Sites-master-catalog/default/dwec20c7c0/images/products/amoxicillin_capsule_500.jpg",
+        Price = 8.99m
+    }
+    };
+}
