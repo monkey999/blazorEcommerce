@@ -24,7 +24,6 @@
                     new ProductType { ProductTypeId = 10, Name = "Xbox" }
                 );
 
-
             modelBuilder.Entity<Category>().HasData(
               new Category
               {
