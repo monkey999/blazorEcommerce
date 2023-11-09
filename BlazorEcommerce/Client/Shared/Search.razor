@@ -23,11 +23,29 @@
     </div>
 </div>
 
+<div class="modal" style="display: @errorDisplay;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Error</h5>
+                <button type="button" class="close" @onclick="CloseError" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger">@errorMessage</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     private string searchText = string.Empty;
     private List<string> suggestions = new();
     protected ElementReference searchInput;
+
+    private string errorDisplay = "none"; // Initially hide the error window
+    private string errorMessage = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -39,12 +57,21 @@
 
     public void SearchProducts()
     {
-        NavigationManager.NavigateTo($"search/{searchText}");
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            errorMessage = "Please enter a product name to search.";
+            errorDisplay = "block";
+        }
+        else
+        {
+            errorDisplay = "none";
+            NavigationManager.NavigateTo($"search/{searchText}");
+        }
     }
 
     public async Task HandleSearch(KeyboardEventArgs args)
     {
-        if (args.Key == null || args.Key.Equals("Enter")) // mb change args.key ==null check to mouseeentargs check?
+        if (args.Key == null || args.Key.Equals("Enter")) 
         {
             SearchProducts();
         }
@@ -52,5 +79,10 @@
         {
             suggestions = await ProductService.GetProductSearchSuggestions(searchText);
         }
+    }
+
+    public void CloseError()
+    {
+        errorDisplay = "none";
     }
 }
