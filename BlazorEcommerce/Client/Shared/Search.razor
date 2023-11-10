@@ -2,6 +2,7 @@
 @inject IProductService ProductService
 
 <div class="input-group">
+
     <input @bind-value="searchText"
            @bind-value:event="oninput"
            type="search"
@@ -9,13 +10,16 @@
            @onkeyup="HandleSearch"
            class="form-control"
            placeholder="Search..."
-    @ref="searchInput" />
+           @ref="searchInput" 
+     />
+
     <datalist id="products">
         @foreach (var suggestion in suggestions)
         {
             <option>@suggestion</option>
         }
     </datalist>
+
     <div class="input-group-append">
         <button class="btn btn-primary" @onclick="SearchProducts">
             <span class="oi oi-magnifying-glass"></span>
@@ -44,7 +48,7 @@
     private List<string> suggestions = new();
     protected ElementReference searchInput;
 
-    private string errorDisplay = "none"; // Initially hide the error window
+    private string errorDisplay = "none"; 
     private string errorMessage = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
