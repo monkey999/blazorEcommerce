@@ -28,6 +28,12 @@ else
             </li>
         }
     </ul>
+
+    for (var i = 1; i <= productService.PageCount; i++)
+    {
+        <a class="btn @(i == productService.CurrentPage ? "btn-info" : "btn-outline-info") page-selection"
+           href="/search/@productService.LastSearchText/@i">@i</a>
+    }
 }
 
 @code {
@@ -35,7 +41,7 @@ else
     {
         productService.ProductsChanged += StateHasChanged;
     }
-   
+
     public void Dispose()
     {
         productService.ProductsChanged -= StateHasChanged;

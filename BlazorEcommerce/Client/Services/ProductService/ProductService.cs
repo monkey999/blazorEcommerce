@@ -30,6 +30,9 @@ namespace BlazorEcommerce.Client.Services.ProductService
                 Products = result.Data;
             }
 
+            CurrentPage = 1;
+            PageCount = 0;
+
             if (Products.Count == 0)
             {
                 Message = "No products found";
@@ -47,6 +50,8 @@ namespace BlazorEcommerce.Client.Services.ProductService
 
         public async Task SearchProducts(string searchText, int page)
         {
+            LastSearchText = searchText;
+
             var result = await _httpClient
                 .GetFromJsonAsync<ServiceResponse<ProductSearchResultDTO>>($"api/product/search/{searchText}/{page}");
 
