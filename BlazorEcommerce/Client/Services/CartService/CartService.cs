@@ -13,23 +13,29 @@ namespace BlazorEcommerce.Client.Services.CartService
 
         public event Action OnChange;
 
-        public async Task AddToCart(CartItem cartItem)
+        public async Task AddToCartAsync(CartItem cartItem)
         {
-            var cart = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
-
-            cart ??= new List<CartItem>();
+            List<CartItem> cart = await GetCartItemsAsync();
 
             cart.Add(cartItem);
 
             await _localStorageService.SetItemAsync("cart", cart);
+
+            OnChange.Invoke();
         }
 
-        public async Task<List<CartItem>> GetCartItems()
+        public async Task<List<CartItem>> GetCartAsync()
+        {
+            List<CartItem> cart = await GetCartItemsAsync();
+
+            return cart;
+        }
+
+        private async Task<List<CartItem>> GetCartItemsAsync()
         {
             var cart = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
 
             cart ??= new List<CartItem>();
-
             return cart;
         }
     }

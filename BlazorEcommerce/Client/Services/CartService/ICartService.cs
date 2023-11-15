@@ -3,7 +3,7 @@
     public interface ICartService
     {
         event Action OnChange;
-        Task AddToCart(CartItem cartItem);
-        Task<List<CartItem>> GetCartItems();
+        Task AddToCartAsync(CartItem cartItem);
+        Task<List<CartItem>> GetCartAsync();
     }
 }
