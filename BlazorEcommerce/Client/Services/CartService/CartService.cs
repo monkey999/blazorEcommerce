@@ -1,14 +1,17 @@
-﻿using Blazored.LocalStorage;
+﻿using BlazorEcommerce.Shared.DTO;
+using Blazored.LocalStorage;
 
 namespace BlazorEcommerce.Client.Services.CartService
 {
     public class CartService : ICartService
     {
         private readonly ILocalStorageService _localStorageService;
+        private readonly HttpClient _hhtpClient;
 
-        public CartService(ILocalStorageService localStorageService)
+        public CartService(ILocalStorageService localStorageService, HttpClient hhtpClient)
         {
             _localStorageService = localStorageService;
+            _hhtpClient = hhtpClient;
         }
 
         public event Action OnChange;
@@ -31,11 +34,22 @@ namespace BlazorEcommerce.Client.Services.CartService
             return cart;
         }
 
+        public async Task<List<CartProductResponseDTO>> GetCartProductsAsync()
+        {
+            var cartItems = await _localStorageService.GetItemAsync<List<CartItem>>("Cart");
+            var response = await _hhtpClient.PostAsJsonAsync("api/cart/products", cartItems);
+
+            var cartProducts = await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>();
+
+            return cartProducts.Data;
+        }
+
         private async Task<List<CartItem>> GetCartItemsAsync()
         {
             var cart = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
 
             cart ??= new List<CartItem>();
+
             return cart;
         }
     }
