@@ -36,7 +36,7 @@ namespace BlazorEcommerce.Client.Services.CartService
 
         public async Task<List<CartProductResponseDTO>> GetCartProductsAsync()
         {
-            var cartItems = await _localStorageService.GetItemAsync<List<CartItem>>("Cart");
+            var cartItems = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
             var response = await _hhtpClient.PostAsJsonAsync("api/cart/products", cartItems);
 
             var cartProducts = await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>();
