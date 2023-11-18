@@ -1,4 +1,5 @@
-﻿using BlazorEcommerce.Shared.DTO;
+﻿using BlazorEcommerce.Shared;
+using BlazorEcommerce.Shared.DTO;
 using Blazored.LocalStorage;
 
 namespace BlazorEcommerce.Client.Services.CartService
@@ -69,6 +70,23 @@ namespace BlazorEcommerce.Client.Services.CartService
                 cart.Remove(cartItem);
                 await _localStorageService.SetItemAsync("cart", cart);
                 OnChange.Invoke();
+            }
+        }
+
+        public async Task UpdateQuantity(CartProductResponseDTO product)
+        {
+            var cart = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
+
+            if (cart == null)
+            {
+                return;
+            }
+            var cartItem = cart.Find(x => x.ProductId == product.ProductId && x.ProductTypeId == product.ProductTypeId);
+
+            if (cartItem != null)
+            {
+                cartItem.Quantity = product.Quantity;
+                await _localStorageService.SetItemAsync("cart", cart);
             }
         }
 
