@@ -20,7 +20,16 @@ namespace BlazorEcommerce.Client.Services.CartService
         {
             List<CartItem> cart = await GetCartItemsAsync();
 
-            cart.Add(cartItem);
+            var sameItem = cart.Find(x => x.ProductId == cartItem.ProductId && x.ProductTypeId == cartItem.ProductTypeId);
+
+            if (sameItem == null)
+            {
+                cart.Add(cartItem);
+            }
+            else
+            {
+                sameItem.Quantity += cartItem.Quantity;
+            }
 
             await _localStorageService.SetItemAsync("cart", cart);
 
