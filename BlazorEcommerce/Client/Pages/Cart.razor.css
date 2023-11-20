@@ -29,7 +29,7 @@
     border: none;
     padding: 0px;
     color: red;
-    font-size: 12px;
+    font-size: 15px;
 }
 
     .btn-delete:hover {
@@ -39,3 +39,4 @@
 .input-quantity {
     width: 70px;
 }
+

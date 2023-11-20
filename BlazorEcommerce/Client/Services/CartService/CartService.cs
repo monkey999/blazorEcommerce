@@ -1,6 +1,4 @@
-﻿using BlazorEcommerce.Shared;
-using BlazorEcommerce.Shared.DTO;
-using Blazored.LocalStorage;
+﻿using BlazorEcommerce.Shared.DTO;
 
 namespace BlazorEcommerce.Client.Services.CartService
 {
@@ -25,6 +23,7 @@ namespace BlazorEcommerce.Client.Services.CartService
 
             if (sameItem == null)
             {
+                cartItem.Quantity += 1;
                 cart.Add(cartItem);
             }
             else
