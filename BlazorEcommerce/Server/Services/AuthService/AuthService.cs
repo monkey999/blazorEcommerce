@@ -2,14 +2,27 @@
 {
     public class AuthService : IAuthService
     {
-        public Task<ServiceResponse<int>> Register(User user, string password)
+        private readonly DataContext _dataContext;
+
+        public AuthService(DataContext dataContext)
         {
-           
+            _dataContext = dataContext;
         }
 
-        public Task<bool> UserExists(string email)
+        public async Task<ServiceResponse<int>> Register(User user, string password)
         {
-           
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> UserExists(string email)
+        {
+            if (await _dataContext.Users.AnyAsync(user => user.Email.ToLower()
+                .Equals(email.ToLower())))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
