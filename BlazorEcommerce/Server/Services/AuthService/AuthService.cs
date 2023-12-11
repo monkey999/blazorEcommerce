@@ -5,7 +5,6 @@ namespace BlazorEcommerce.Server.Services.AuthService
     public class AuthService : IAuthService
     {
         private readonly DataContext _dataContext;
-
         public AuthService(DataContext dataContext)
         {
             _dataContext = dataContext;
