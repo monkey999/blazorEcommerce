@@ -17,10 +17,11 @@ namespace BlazorEcommerce.Server.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegister request)
         {
-            var response = await _authService.Register(new User
-            {
-                Email = request.Email
-            }, request.Password);
+            var response = await _authService.Register(
+                new User
+                {
+                    Email = request.Email
+                }, request.Password);
 
             if (!response.Success)
             {
