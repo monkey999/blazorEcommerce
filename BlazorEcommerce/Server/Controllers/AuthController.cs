@@ -1,4 +1,5 @@
-﻿using BlazorEcommerce.Server.Services.AuthService;
+﻿using Azure.Core;
+using BlazorEcommerce.Server.Services.AuthService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorEcommerce.Server.Controllers
@@ -24,6 +25,19 @@ namespace BlazorEcommerce.Server.Controllers
                 }, request.Password);
 
             if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLogin request)
+        {
+            var response = await _authService.Login(request.Email, request.Password);
+
+            if(!response.Success)
             {
                 return BadRequest(response);
             }
