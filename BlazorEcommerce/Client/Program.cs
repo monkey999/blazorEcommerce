@@ -6,7 +6,8 @@ global using BlazorEcommerce.Client.Services.CartService;
 global using Blazored.LocalStorage;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using BlazorEcommerce.Client.Services.AuthService;
+global using BlazorEcommerce.Client.Services.AuthService;
+global using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorEcommerce.Client
 {
@@ -24,6 +25,9 @@ namespace BlazorEcommerce.Client
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+            builder.Services.AddOptions();
+            builder.Services.AddAuthorizationCore();
 
             await builder.Build().RunAsync();
         }
