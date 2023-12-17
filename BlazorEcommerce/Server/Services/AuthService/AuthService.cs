@@ -111,7 +111,7 @@ namespace BlazorEcommerce.Server.Services.AuthService
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);
-
+            
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
@@ -132,7 +132,7 @@ namespace BlazorEcommerce.Server.Services.AuthService
             user.PasswordSalt = passwordSalt;
 
             await _dataContext.SaveChangesAsync();
-
+            
             return new ServiceResponse<bool> { Data = true, Message = "Password has been changed!" };
         }
     }
