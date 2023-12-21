@@ -99,8 +99,6 @@ namespace BlazorEcommerce.Client.Services.CartService
             {
                 await _localStorageService.RemoveItemAsync("cart");
             }
-
-            OnChange.Invoke();
         }
 
         public async Task UpdateQuantity(CartProductResponseDTO product)

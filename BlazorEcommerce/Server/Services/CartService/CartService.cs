@@ -14,6 +14,13 @@ namespace BlazorEcommerce.Server.Services.CartService
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<ServiceResponse<int>> GetCartItemsCount()
+        {
+            var count = (await _dataContext.CartItems.Where(ci => ci.UserId == GetUserId()).ToListAsync()).Count();
+
+            return new ServiceResponse<int> { Data = count };
+        }
+
         public async Task<ServiceResponse<List<CartProductResponseDTO>>> GetCartProducts(List<CartItem> cartItems)
         {
             var result = new ServiceResponse<List<CartProductResponseDTO>>
@@ -73,4 +80,3 @@ namespace BlazorEcommerce.Server.Services.CartService
         private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
     }
 }
- 
