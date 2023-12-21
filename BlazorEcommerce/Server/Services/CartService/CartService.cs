@@ -57,5 +57,15 @@ namespace BlazorEcommerce.Server.Services.CartService
 
             return result;
         }
+
+        public async Task<ServiceResponse<List<CartProductResponseDTO>>> StoreCartItems(List<CartItem> cartItems, int userId)
+        {
+            cartItems.ForEach(cartItem => cartItem.UserId = userId);
+
+            _dataContext.CartItems.AddRange(cartItems);
+            await _dataContext.SaveChangesAsync();
+
+            return await GetCartProducts(await _dataContext.CartItems.Where(ci => ci.UserId == userId).ToListAsync());
+        }
     }
 }
