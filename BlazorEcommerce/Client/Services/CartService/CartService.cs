@@ -79,6 +79,7 @@ namespace BlazorEcommerce.Client.Services.CartService
             {
                 cart.Remove(cartItem);
                 await _localStorageService.SetItemAsync("cart", cart);
+
                 OnChange.Invoke();
             }
         }
