@@ -34,7 +34,9 @@ namespace BlazorEcommerce.Server.Controllers
         [HttpGet("count")]
         public async Task<ActionResult<ServiceResponse<int>>> GetCartItemsCount()
         {
-            return await _cartService.GetCartItemsCount();
+            var result = await _cartService.GetCartItemsCount();
+
+            return Ok(result);
         }
     }
 }

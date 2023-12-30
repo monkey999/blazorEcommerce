@@ -5,13 +5,13 @@ namespace BlazorEcommerce.Client.Services.CartService
     public class CartService : ICartService
     {
         private readonly ILocalStorageService _localStorageService;
-        private readonly HttpClient _hhtpClient;
+        private readonly HttpClient _htppClient;
         private readonly AuthenticationStateProvider _authStateProvider;
 
         public CartService(ILocalStorageService localStorageService, HttpClient hhtpClient, AuthenticationStateProvider authStateProvider)
         {
             _localStorageService = localStorageService;
-            _hhtpClient = hhtpClient;
+            _htppClient = hhtpClient;
             _authStateProvider = authStateProvider;
         }
 
@@ -44,7 +44,7 @@ namespace BlazorEcommerce.Client.Services.CartService
 
             await _localStorageService.SetItemAsync("cart", cart);
 
-            OnChange.Invoke();
+            await GetCartItemsCount();
         }
 
         private async Task<bool> IsUserAuthenticated()
@@ -62,7 +62,7 @@ namespace BlazorEcommerce.Client.Services.CartService
         public async Task<List<CartProductResponseDTO>> GetCartProductsAsync()
         {
             var cartItems = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
-            var response = await _hhtpClient.PostAsJsonAsync("api/cart/products", cartItems);
+            var response = await _htppClient.PostAsJsonAsync("api/cart/products", cartItems);
 
             var cartProducts = await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>();
 
@@ -85,7 +85,7 @@ namespace BlazorEcommerce.Client.Services.CartService
                 cart.Remove(cartItem);
                 await _localStorageService.SetItemAsync("cart", cart);
 
-                OnChange.Invoke();
+                await GetCartItemsCount();
             }
         }
 
@@ -98,7 +98,7 @@ namespace BlazorEcommerce.Client.Services.CartService
                 return;
             }
 
-            await _hhtpClient.PostAsJsonAsync("api/cart", localCart);
+            await _htppClient.PostAsJsonAsync("api/cart", localCart);
 
             if (emptyLocalCart)
             {
@@ -125,11 +125,32 @@ namespace BlazorEcommerce.Client.Services.CartService
 
         private async Task<List<CartItem>> GetCartItemsAsync()
         {
+            await GetCartItemsCount();
+
             var cart = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
 
             cart ??= new List<CartItem>();
 
             return cart;
+        }
+
+        public async Task GetCartItemsCount()
+        {
+            if (await IsUserAuthenticated())
+            {
+                var result = await _htppClient.GetFromJsonAsync<ServiceResponse<int>>("api/cart/count");
+                var count = result.Data;
+
+                await _localStorageService.SetItemAsync<int>("cartItemsCount", count);
+            }
+            else
+            {
+                var cart = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
+
+                await _localStorageService.SetItemAsync<int>("cartItemsCount", cart != null ? cart.Count : 0);
+            }
+
+            OnChange.Invoke();
         }
     }
 }

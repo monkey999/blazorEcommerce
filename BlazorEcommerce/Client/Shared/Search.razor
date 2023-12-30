@@ -10,8 +10,7 @@
            @onkeyup="HandleSearch"
            class="form-control"
            placeholder="Search..."
-           @ref="searchInput" 
-     />
+           @ref="searchInput" />
 
     <datalist id="products">
         @foreach (var suggestion in suggestions)
@@ -49,7 +48,7 @@
     private List<string> suggestions = new();
     protected ElementReference searchInput;
 
-    private string errorDisplay = "none"; 
+    private string errorDisplay = "none";
     private string errorMessage = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -76,7 +75,7 @@
 
     public async Task HandleSearch(KeyboardEventArgs args)
     {
-        if (args.Key == null || args.Key.Equals("Enter")) 
+        if (args.Key == null || args.Key.Equals("Enter"))
         {
             SearchProducts();
         }
