@@ -36,7 +36,7 @@ namespace BlazorEcommerce.Server.Controllers
         {
             var result = await _cartService.GetCartItemsCount();
 
-            return Ok(result);
+            return Ok(result.Data);
         }
     }
 }
