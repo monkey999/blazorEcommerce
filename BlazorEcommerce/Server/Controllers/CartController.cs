@@ -1,6 +1,5 @@
 ﻿using BlazorEcommerce.Shared.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BlazorEcommerce.Server.Controllers
 {
@@ -38,5 +37,14 @@ namespace BlazorEcommerce.Server.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<CartProductResponseDTO>>> GetDbCartProducts()
+        {
+     var result = await _cartService.GetDbCartProducts();
+
+
+        }
     }
 }
+

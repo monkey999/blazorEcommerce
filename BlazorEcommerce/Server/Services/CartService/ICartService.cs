@@ -1,4 +1,5 @@
 ﻿using BlazorEcommerce.Shared.DTO;
+using System.Collections.Generic;
 
 namespace BlazorEcommerce.Server.Services.CartService
 {
@@ -7,5 +8,6 @@ namespace BlazorEcommerce.Server.Services.CartService
         Task<ServiceResponse<List<CartProductResponseDTO>>> GetCartProducts(List<CartItem> cartItems);
         Task<ServiceResponse<List<CartProductResponseDTO>>> StoreCartItems(List<CartItem> cartItems);
         Task<ServiceResponse<int>> GetCartItemsCount();
+        Task<ServiceResponse<List<CartProductResponseDTO>>> GetDbCartProducts();
     }
 }
