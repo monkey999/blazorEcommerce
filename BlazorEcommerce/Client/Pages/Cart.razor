@@ -22,7 +22,7 @@ else
                     <h5><a href="/product/@product.ProductId">@product.Title</a></h5>
                     <span>@product.ProductType</span><br />
                     <input type="number" value="@product.Quantity"
-                    @onchange="@((ChangeEventArgs e) => UpdateQuantity(e, product))"
+                           @onchange="@((ChangeEventArgs e) => UpdateQuantity(e, product))"
                            class="form-control input-quantity"
                            min="1" />
                     <button class="btn-delete" @onclick="@(() =>
@@ -36,7 +36,7 @@ else
             </div>
         }
         <div class="cart-product-price">
-            Total (@cartProducts.Count): $@cartProducts.Sum(product=> @product.Price * product.Quantity)
+            Total (@cartProducts.Count): $@cartProducts.Sum(product => @product.Price * product.Quantity)
         </div>
     </div>
 }
@@ -59,16 +59,13 @@ else
 
     private async Task LoadCart()
     {
-        var cart = await CartService.GetCartAsync();
+        await CartService.GetCartItemsCount();
+        cartProducts = await CartService.GetCartProductsAsync();
 
-        if (cart.Count == 0)
+        if (cartProducts == null || cartProducts.Count == 0)
         {
             message = "Your cart is empty.";
             cartProducts = new List<CartProductResponseDTO>();
-        }
-        else
-        {
-            cartProducts = await CartService.GetCartProductsAsync();
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using BlazorEcommerce.Shared.DTO;
+using static System.Net.WebRequestMethods;
 
 namespace BlazorEcommerce.Client.Services.CartService
 {
@@ -54,21 +55,28 @@ namespace BlazorEcommerce.Client.Services.CartService
             return isAuthenticated;
         }
 
-        public async Task<List<CartItem>> GetCartAsync()
-        {
-            List<CartItem> cart = await GetCartItemsAsync();
-
-            return cart;
-        }
-
         public async Task<List<CartProductResponseDTO>> GetCartProductsAsync()
         {
-            var cartItems = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
-            var response = await _htppClient.PostAsJsonAsync("api/cart/products", cartItems);
+            if (await IsUserAuthenticated())
+            {
+                var response = await _htppClient.GetFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>("api/cart");
 
-            var cartProducts = await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>();
+                return response.Data;
+            }
+            else
+            {
+                var cartItems = await _localStorageService.GetItemAsync<List<CartItem>>("cart");
 
-            return cartProducts.Data;
+                if (cartItems == null)
+                    return new List<CartProductResponseDTO>();
+
+                var response = await _htppClient.PostAsJsonAsync("api/cart/products", cartItems);
+
+                var cartProducts =
+                    await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartProductResponseDTO>>>();
+
+                return cartProducts.Data;
+            }
         }
 
         public async Task RemoveProductFromCart(int productId, int productTypeId)
